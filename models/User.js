@@ -8,6 +8,7 @@ const usersSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String, required: true, select: false },
+    adm: { type: Boolean, required: true, default: false },
     /* preferences: { type: Object, default: { bgBlack: true, logo: false } }, */
   },
   { timestamps: true }

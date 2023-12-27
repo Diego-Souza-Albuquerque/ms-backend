@@ -5,7 +5,6 @@ import { verifyToken } from "./middlewares/auth.js";
 import mongoose from "mongoose";
 
 import userRoutes from "./routes/users.js";
-import adminRoutes from "./routes/admin.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -20,7 +19,6 @@ app.use(bodyParser.json());
 // ROUTES
 
 app.use("/api", userRoutes); //chamando a rota criada para users
-app.use("/api", verifyToken, adminRoutes); //chamando a rota criada para admin
 
 app.listen(4000, () => {
   console.log("Servidor foi iniciado pelo express");
