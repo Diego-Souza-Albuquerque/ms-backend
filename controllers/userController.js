@@ -24,14 +24,14 @@ export const createAccount = async (req, res) => {
 
 export const editAccount = async (req, res) => {
   try {
-    const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
+    /*   const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
 
     if (!isValidObjectId) {
       res.status(400).json({ msg: "ID de usuário inválida." });
       return;
-    }
+    } */
 
-    const id = req.params.id;
+    const user_id = req.user.id;
 
     const user = {
       name: req.body.name,
@@ -39,7 +39,7 @@ export const editAccount = async (req, res) => {
       password: req.body.password,
     };
 
-    const updateUser = await UserModel.findByIdAndUpdate(id, user);
+    const updateUser = await UserModel.findByIdAndUpdate(user_id, user);
 
     if (!updateUser) {
       res.status(404).json({ msg: "Usuário não encontrado." });
@@ -48,6 +48,7 @@ export const editAccount = async (req, res) => {
 
     res.status(200).json({ user, msg: "Usuário atualizado" });
   } catch (error) {
+    res.status(500).json({ error: error.message });
     console.log(error);
   }
 };
@@ -55,24 +56,29 @@ export const editAccount = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await UserModel.findOne({ email }).select("+password");
+
     if (!user) {
-      res.status(400).json({ msg: "Usuário não encontrado" });
+      res.status(401).json({ msg: "E-mail e/ou senha incorreta" });
       return;
     }
 
     if (!(await bcrypt.compare(password, user.password))) {
-      return res.status(400).send({
-        message: "Senha inválida",
+      return res.status(401).json({
+        message: "E-mail e/ou senha incorreta",
       });
     }
     user.password = undefined; // retirando a senha pra não mostrar
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      subject: String(user.id),
       expiresIn: 86400,
     }); // gerando o token... 68400 é para expirar em 1 dia
-    return res.json({ user, token });
+
+    return res.status(200).json({ user, token, msg: "Usuário logado" });
   } catch (error) {
+    res.status(500).json({ error: error.message });
     console.log(error);
   }
 };

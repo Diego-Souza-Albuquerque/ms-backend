@@ -5,6 +5,7 @@ export const getAllUsers = async (req, res) => {
     const users = await UserModel.find();
     res.json(users);
   } catch (error) {
+    res.status(500).json({ error: err.message });
     console.log(error);
   }
 };
@@ -49,6 +50,7 @@ export const deleteUser = async (req, res) => {
 
     res.status(200).json({ deletedUser, msg: "Usuário excluido" });
   } catch (error) {
+    res.status(500).json({ error: err.message });
     console.log(error);
   }
 };
@@ -80,6 +82,7 @@ export const updateToAdm = async (req, res) => {
 
     res.status(200).json({ user, msg: "Usuário virou administrador" });
   } catch (error) {
+    res.status(500).json({ error: err.message });
     console.log(error);
   }
 };

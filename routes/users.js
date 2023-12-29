@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
 
+import { verifyToken } from "../middlewares/auth.js";
+
 import {
   editAccount,
   createAccount,
@@ -17,10 +19,10 @@ import {
 // all user routes
 router.post("/createAccount", createAccount);
 router.post("/login", login);
-router.put("/editAccount/:id", editAccount);
+router.put("/editAccount/", verifyToken, editAccount);
 
 //admin routes
-router.get("/getAllUsers", getAllUsers);
+router.get("/getAllUsers", verifyToken, getAllUsers);
 router.get("/findEspecificUser/:id", findEspecificUser);
 router.put("/updateToAdm/:id", updateToAdm);
 

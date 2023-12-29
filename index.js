@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/users.js";
 
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();
@@ -14,7 +15,7 @@ const app = express();
 app.use(cors()); // declarando o cors para nosso sistema
 
 app.use(express.json()); //permite a comunicação de dados via json
-app.use(bodyParser.json());
+/* app.use(bodyParser.json());  o express.json já faz o trabalho do bodyParser.json*/
 
 // ROUTES
 
@@ -32,3 +33,10 @@ mongoose
   .connect("mongodb://localhost:27017/musicSlider")
   .then(() => console.log("Conectado ao MongoDB"))
   .catch((err) => console.log(err));
+
+process.on("SIGINT", () => {
+  mongoose.connection.close(() => {
+    console.log("Conexão com o MongoDB encerrada.");
+    process.exit(0);
+  });
+});
