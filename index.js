@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import { verifyToken } from "./middlewares/auth.js";
 import mongoose from "mongoose";
+import morgan from "morgan";
 
 import userRoutes from "./routes/users.js";
 
@@ -16,6 +15,10 @@ app.use(cors()); // declarando o cors para nosso sistema
 
 app.use(express.json()); //permite a comunicação de dados via json
 /* app.use(bodyParser.json());  o express.json já faz o trabalho do bodyParser.json*/
+
+app.use(express.urlencoded({ extended: true })); //lidar com requisições url para facilitar o envio de arquivos
+
+app.use(morgan("dev")); //responsável pelos logs (dev em um formato menor)
 
 // ROUTES
 
