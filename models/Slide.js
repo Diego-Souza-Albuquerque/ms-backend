@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
-
-const slideSchema = new Schema({
+const slideSchema = new mongoose.Schema({
   author: String,
   title: String,
   name: String,

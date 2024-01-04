@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import multerS3 from "multer-s3";
 import { S3 } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
+import Slide from "../models/Slide.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const s3 = new S3({
   },
 });
 
+// Definindo a extensão que eu quero:
 const pptxFileFilter = (req, file, cb) => {
   const allowedExtensions = ["pptx"];
 
@@ -34,7 +36,48 @@ const pptxFileFilter = (req, file, cb) => {
   }
 };
 
-const upMusicMulterLocal = multer({
+export const uploadSlideS3 = multer({
+  storage: multerS3({
+    s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE, //possibilita ao browser ler o arquivo em tela em vez de fazer o download direto que é o default
+    acl: "public-read", //permitir que os arquivos sejam publicos
+    key: (req, file, cb) => {
+      const filename = `${uuidv4()} - ${decodeURIComponent(file.originalname)}`;
+      const folder = "sliders";
+      cb(null, `${folder}/${filename}`);
+    },
+  }),
+  fileFilter: pptxFileFilter,
+});
+
+export const deleteSlideS3 = async (req, res, next) => {
+  const slide = await Slide.findById(req.params.id);
+
+  try {
+    // Procurando se o arquivo existe no s3:
+    const headObjectResponse = await s3.headObject({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: slide.key,
+    });
+
+    // Deletando o arquivo existente:
+    const response = await s3.deleteObject({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: slide.key,
+    });
+    console.log("Arquivo deletado com sucesso no S3");
+    return next();
+  } catch (error) {
+    console.log(error); //se der erro 404 é que não foi encontrado no S3
+    return res
+      .status(500)
+      .json({ Erro: "Ocorreu um erro na exclusão do arquivo no S3" });
+  }
+};
+
+// Salvando na pasta local... (usado para testes)
+export const upMusicMulterLocal = multer({
   dest: path.resolve("tmp", "uploads"),
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -52,21 +95,3 @@ const upMusicMulterLocal = multer({
     fileSize: 10 * 1024 * 1024,
   },
 });
-
-const upMusicMulterS3 = multer({
-  storage: multerS3({
-    s3,
-    bucket: process.env.AWS_BUCKET_NAME,
-    contentType: multerS3.AUTO_CONTENT_TYPE, //possibilita ao browser ler o arquivo em tela em vez de fazer o download direto que é o default
-    acl: "public-read", //permitir que os arquivos sejam publicos
-    key: (req, file, cb) => {
-      const extension = file.originalname.split(".").pop();
-      const filename = `${uuidv4()}.${extension}`;
-      const folder = "sliders";
-      cb(null, `${folder}/${filename}`);
-    },
-  }),
-  fileFilter: pptxFileFilter,
-});
-
-export { upMusicMulterLocal, upMusicMulterS3 };

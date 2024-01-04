@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 
 import userRoutes from "./routes/users.js";
+import slideRoutes from "./routes/slides.js";
 
 import dotenv from "dotenv";
 
@@ -11,21 +12,22 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors()); // declarando o cors para nosso sistema
+app.use(cors()); // habilitando o compartilhamento de recursos com origens diferentes
 
 app.use(express.json()); //permite a comunicação de dados via json
 /* app.use(bodyParser.json());  o express.json já faz o trabalho do bodyParser.json*/
 
 app.use(express.urlencoded({ extended: true })); //lidar com requisições url para facilitar o envio de arquivos
 
-app.use(morgan("dev")); //responsável pelos logs (dev em um formato menor)
+app.use(morgan("dev")); //responsável pelos logs (dev é em um formato menor)
 
 // ROUTES
 
-app.use("/api", userRoutes); //chamando a rota criada para users
+app.use("/api", userRoutes); //Rota dos usuários
+app.use("/api", slideRoutes); //Rota para os slides
 
 app.listen(4000, () => {
-  console.log("Servidor foi iniciado pelo express");
+  console.log("Servidor foi iniciado pelo express na porta 4000");
 });
 
 //FrontEnd na porta 3000

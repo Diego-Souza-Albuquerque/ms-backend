@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import UserModel from "../models/User.js";
-import Slide from "../models/Slide.js";
 
 export const createAccount = async (req, res) => {
   try {
@@ -78,25 +77,6 @@ export const login = async (req, res) => {
     }); // gerando o token... 68400 é para expirar em 1 dia
 
     return res.status(200).json({ user, token, msg: "Usuário logado" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-    console.log(error);
-  }
-};
-
-export const upMusic = async (req, res) => {
-  try {
-    const { title, author } = req.body;
-    const slide = await Slide.create({
-      title: title,
-      author: author,
-      name: req.file.originalname,
-      size: req.file.size,
-      key: req.file.filename,
-      url: req.file.key,
-    });
-
-    return res.json(slide);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log(error);
