@@ -26,7 +26,7 @@ app.use(morgan("dev")); //responsável pelos logs (dev é em um formato mais res
 app.use("/api", userRoutes); //Rota dos usuários
 app.use("/api", slideRoutes); //Rota para os slides
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Servidor foi iniciado pelo express na porta ${PORT}`);
 });
@@ -39,10 +39,3 @@ mongoose
   .connect("mongodb://localhost:27017/musicSlider")
   .then(() => console.log("Conectado ao MongoDB"))
   .catch((err) => console.log(err));
-
-process.on("SIGINT", () => {
-  mongoose.connection.close(() => {
-    console.log("Conexão com o MongoDB encerrada.");
-    process.exit(0);
-  });
-});
