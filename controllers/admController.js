@@ -5,7 +5,7 @@ export const getAllUsers = async (req, res) => {
     const users = await UserModel.find();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
     console.log(error);
   }
 };

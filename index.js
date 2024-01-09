@@ -21,6 +21,12 @@ app.use(express.urlencoded({ extended: true })); //lidar com requisições url p
 
 app.use(morgan("dev")); //responsável pelos logs (dev é em um formato mais resumido de log)
 
+// Conexão com o MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Conectado ao MongoDB"))
+  .catch((err) => console.error("Erro na conexão com o MongoDB:", err));
+
 // ROUTES
 
 app.use("/api", userRoutes); //Rota dos usuários
@@ -34,8 +40,3 @@ app.listen(PORT, () => {
 //FrontEnd na porta 3000
 //BackEnd (node) na porta 4000
 //Banco de dados (MongoDb) na porta 27017
-
-mongoose
-  .connect("mongodb://localhost:27017/musicSlider")
-  .then(() => console.log("Conectado ao MongoDB"))
-  .catch((err) => console.log(err));
