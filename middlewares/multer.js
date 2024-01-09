@@ -1,5 +1,5 @@
 import multer from "multer";
-import { v4 as uuidv4 } from "uuid";
+import { uuidv4 } from "uuid";
 import multerS3 from "multer-s3";
 import { S3 } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
