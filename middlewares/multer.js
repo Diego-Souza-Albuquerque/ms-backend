@@ -1,5 +1,5 @@
 import multer from "multer";
-import { uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import multerS3 from "multer-s3";
 import { S3 } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
@@ -75,7 +75,7 @@ export const deleteSlideS3 = async (req, res, next) => {
 };
 
 /*  Salvando na pasta local... (usado para testes)
-import path from "path";
+ import path from "path";
 import crypto from "crypto"; 
 export const upMusicMulterLocal = multer({
   dest: path.resolve("tmp", "uploads"),
