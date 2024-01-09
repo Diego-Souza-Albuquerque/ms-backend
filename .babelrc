@@ -1,0 +1,14 @@
+//usando o babel para usar CommonJS (PM2 só funciona por CommonJs)
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": "auto",
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ]
+}

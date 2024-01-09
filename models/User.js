@@ -8,8 +8,12 @@ const usersSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String },
     password: { type: String, required: true, select: false },
+    avatar: { type: String, default: "new" },
     adm: { type: Boolean, default: false },
-    /* preferences: { type: Object, default: { bgBlack: true, logo: false } }, */
+    preferences: {
+      type: Object,
+      default: { bgBlack: true, logoActive: false },
+    },
   },
   { timestamps: true }
 );

@@ -17,7 +17,7 @@ const s3 = new S3({
   },
 });
 
-// Definindo a extensão que eu quero:
+// Definindo a extensão que eu quero para o multer filtrar
 const pptxFileFilter = (req, file, cb) => {
   const allowedExtensions = ["pptx"];
 

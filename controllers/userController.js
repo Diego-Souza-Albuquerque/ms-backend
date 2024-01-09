@@ -9,7 +9,7 @@ export const createAccount = async (req, res) => {
     const user = await UserModel.findOne({ email: email });
 
     if (user)
-      return res.status(201).json({
+      return res.status(409).json({
         msg: "Infelizmente este email já está sendo utilizado, tente outro email!",
       });
 

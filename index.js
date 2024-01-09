@@ -19,15 +19,16 @@ app.use(express.json()); //permite a comunicação de dados via json
 
 app.use(express.urlencoded({ extended: true })); //lidar com requisições url para facilitar o envio de arquivos
 
-app.use(morgan("dev")); //responsável pelos logs (dev é em um formato menor)
+app.use(morgan("dev")); //responsável pelos logs (dev é em um formato mais resumido de log)
 
 // ROUTES
 
 app.use("/api", userRoutes); //Rota dos usuários
 app.use("/api", slideRoutes); //Rota para os slides
 
-app.listen(4000, () => {
-  console.log("Servidor foi iniciado pelo express na porta 4000");
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Servidor foi iniciado pelo express na porta ${PORT}`);
 });
 
 //FrontEnd na porta 3000
