@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 import userRoutes from "./routes/users.js";
 import slideRoutes from "./routes/slides.js";
+import startRoute from "./routes/start.js";
 
 import dotenv from "dotenv";
 
@@ -28,15 +29,11 @@ mongoose
   .catch((err) => console.error("Erro na conexão com o MongoDB:", err));
 
 // ROUTES
-
 app.use("/api", userRoutes); //Rota dos usuários
 app.use("/api", slideRoutes); //Rota para os slides
+app.use("/api", startRoute); //Rota para startar o Render (free)
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Servidor foi iniciado pelo express na porta ${PORT}`);
 });
-
-//FrontEnd na porta 3000
-//BackEnd (node) na porta 4000
-//Banco de dados (MongoDb) na porta 27017
