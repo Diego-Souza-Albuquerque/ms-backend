@@ -7,6 +7,8 @@ const slideSchema = new mongoose.Schema({
   size: Number,
   key: String,
   url: String,
+  userId: { type: String, default: "Desconhecido" },
+  userName: { type: String, default: "Desconhecido" },
   createdAt: {
     type: Date,
     default: Date.now,

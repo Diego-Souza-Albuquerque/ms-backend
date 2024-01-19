@@ -23,12 +23,14 @@ export const getSpecificSlide = async (req, res) => {
 
 export const uploadSlide = async (req, res) => {
   try {
-    const { title, author } = req.body;
+    const { title, author, userId, userName } = req.body;
     const slide = await Slide.create({
       title: title,
       author: author,
       name: req.file.originalname,
       size: req.file.size,
+      userId: userId,
+      userName: userName,
       key: req.file.key,
       url: req.file.location,
     });
